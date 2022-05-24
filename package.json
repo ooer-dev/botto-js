@@ -1,0 +1,20 @@
+{
+  "name": "botto",
+  "version": "2.0.0",
+  "description": "Discord.JS version of Botto",
+  "main": "src/index.js",
+  "contributors": [
+    "Gabe Macken (https://github.com/GabeMacken)",
+    "William McKinnerney <me@williammck.net> (https://williammck.net)"
+  ],
+  "repository": "github:ooer-dev/botto-js",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.27.2",
+    "canvas": "^2.9.1",
+    "discord.js": "^13.7.0",
+    "fs": "^0.0.1-security",
+    "he": "^1.1.0",
+    "raw.js": "^0.6.0"
+  }
+}

@@ -1,0 +1,2 @@
+src/brains/data/* filter=lfs diff=lfs merge=lfs -text
+src/img/data/* filter=lfs diff=lfs merge=lfs -text
