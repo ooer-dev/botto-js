@@ -120,8 +120,6 @@ class Markov {
       }
     }
 
-    console.log(rndlist)
-
     if (rndlist.length === 0) {
       return this.speakRand(length)
     }
@@ -160,8 +158,10 @@ class Markov {
   #selectWord (word, rev = false) {
     const DATA = !rev ? this.data : this.r_data
 
-    let rndlist = []
     const observation = DATA.find(d => d.id === word)
+    if (observation === undefined) return null
+
+    let rndlist = []
     for (const datum of observation.dat) {
       rndlist.push({
         data: datum.id,
