@@ -50,7 +50,7 @@ class Markov {
     }
 
     for (const i in DATA) {
-      for (const j in text) {
+      for (let j = 0; j < text.length; j++) {
         if (DATA[i].id !== text[j]) continue
 
         let found = false
@@ -76,15 +76,22 @@ class Markov {
     }
   }
 
-  async feedArray (arr, predicate, i = 0) {
-    if (i === arr.length) return
-
+  feedArray (arr, predicate) {
     if (predicate === undefined) predicate = _ => true
 
-    const str = arr[i]
-    if (predicate(str)) this.feed(str)
+    const inner = (resolve, i = 0) => {
+      if (i === arr.length) {
+        resolve()
+        return
+      }
 
-    setImmediate(() => this.feedArray(arr, predicate, ++i))
+      const str = arr[i]
+      if (predicate(str)) this.feed(str)
+
+      setImmediate(() => inner(resolve, ++i))
+    }
+
+    return new Promise(resolve => { inner(resolve) })
   }
 
   speakRand (length) {
@@ -94,38 +101,43 @@ class Markov {
   }
 
   speakResponse (text, length) {
-    const half = Math.floor(length / 2)
-
     let rndlist = []
     let wordList = this.#nSized(text.split(' '))
 
     const addW = this.#nSized(text.substring(text.indexOf(' ') + 1, text.length).split(' '))
-    wordList.concat(addW)
+    wordList = wordList.concat(addW)
 
     const addI = text.split(' ')
-    wordList.concat(addI)
+    wordList = wordList.concat(addI)
 
     for (let parent of this.data) {
       for (let word of wordList) {
         if (parent.id.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
           const weight = parent.id.toLowerCase() === word.toLowerCase() ? 1 : 2
           rndlist.push({ data: parent.id, weight })
-          rndlist.concat(parent.dat.map(d => ({ data: d.id, weight: d.weight })))
+          rndlist = rndlist.concat(parent.dat.map(d => ({ data: d.id, weight: d.weight })))
         }
       }
     }
+
+    console.log(rndlist)
 
     if (rndlist.length === 0) {
       return this.speakRand(length)
     }
 
     const starter = Markov.#weightRandom(rndlist)
-    const retrats = starter.split('').reverse().join('')
+    let out = ''
 
-    const rSpeak = Math.random() > 0.5 ? this.#speak(retrats, half, true).split('').reverse().join('') : ''
-    const fSpeak = this.#speak(starter, half)
+    if (Math.random() > 0.5) {
+      length = Math.floor(length / 2)
+      const retrats = starter.split('').reverse().join('')
+      out += this.#speak(retrats, length, true).split('').reverse().join('')
+    }
 
-    return rSpeak + fSpeak
+    out += this.#speak(starter, length)
+
+    return out
   }
 
   #speak (start, length, rev = false) {
@@ -149,17 +161,12 @@ class Markov {
     const DATA = !rev ? this.data : this.r_data
 
     let rndlist = []
-    for (const parent of DATA) {
-      if (DATA.id !== word) {
-        continue
-      }
-
-      for (const datum of parent.dat) {
-        rndlist.push({
-          data: datum.id,
-          weight: datum.weight,
-        })
-      }
+    const observation = DATA.find(d => d.id === word)
+    for (const datum of observation.dat) {
+      rndlist.push({
+        data: datum.id,
+        weight: datum.weight,
+      })
     }
 
     if (rndlist.length === 0) return null

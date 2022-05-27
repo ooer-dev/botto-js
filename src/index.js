@@ -260,7 +260,7 @@ bot.on('messageCreate', async function (msginst) {
   }
 
   if (channels.isLearnChannel(channelID)) {
-    await combo.learn(message)
+    combo.learn(message)
   }
 
   const reply = dcache.getMessageFromChannel(channelID)

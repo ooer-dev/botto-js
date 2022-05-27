@@ -29,14 +29,14 @@ class DiscordCache {
   }
 
   addMessageToChannel (channelId, msg) {
-    let channel = this.#channels.filter(c => c.id == channelId)[0] || null
+    let channel = this.#channels.find(c => c.id == channelId) || null
     if (!channel) {
       this.#channels.push({ id: channelId, cache: [] })
       channel = this.#channels[this.#channels.length - 1]
     }
 
     if (channel.cache.length >= channelMessageLimit) {
-      channel.cache.splice(channel.cache.length - 1, 1)
+      channel.cache.splice(0, 1)
     }
     channel.cache.push(msg)
 
@@ -44,7 +44,7 @@ class DiscordCache {
   }
 
   getMessageFromChannel (channelId) {
-    let channel = this.#channels.filter(c => c.id == channelId)[0]
+    let channel = this.#channels.find(c => c.id == channelId)
 
     let n = channelMessageLimit
     let kill = false

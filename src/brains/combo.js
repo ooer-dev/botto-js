@@ -18,7 +18,7 @@ class ComboBrain {
     this.#counter = maxGenerations
   }
 
-  async learn (msg) {
+  learn (msg) {
     this.#brain.feed(msg)
     dcache.addMessage(msg)
   }
