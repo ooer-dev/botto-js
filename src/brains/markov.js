@@ -41,7 +41,7 @@ class Markov {
       }
     }
 
-    WLIST = WLIST.concat(acceptedWords)
+    WLIST.push(...acceptedWords)
 
     for (const word of text) {
       if (DATA.filter(d => d.id === word).length === 0) {
@@ -105,17 +105,17 @@ class Markov {
     let wordList = this.#nSized(text.split(' '))
 
     const addW = this.#nSized(text.substring(text.indexOf(' ') + 1, text.length).split(' '))
-    wordList = wordList.concat(addW)
+    wordList.push(...addW)
 
     const addI = text.split(' ')
-    wordList = wordList.concat(addI)
+    wordList.push(...addI)
 
     for (let parent of this.data) {
       for (let word of wordList) {
         if (parent.id.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
           const weight = parent.id.toLowerCase() === word.toLowerCase() ? 1 : 2
           rndlist.push({ data: parent.id, weight })
-          rndlist = rndlist.concat(parent.dat.map(d => ({ data: d.id, weight: d.weight })))
+          rndlist.push(...parent.dat.map(d => ({ data: d.id, weight: d.weight })))
         }
       }
     }
