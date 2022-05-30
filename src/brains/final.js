@@ -23,6 +23,7 @@ class FinalBrain {
       length = Math.round(Math.random() * 15 + 1)
     }
 
+    console.log('Generating message, length: ' + length)
     const response = Math.random() < 0.4 ? this.#brain.speakResponse(msg, length) : this.#brain.speakRand(length)
 
     return he.decode(response).replace(/\\n/g, '\n')

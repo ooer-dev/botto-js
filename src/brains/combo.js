@@ -52,8 +52,10 @@ class ComboBrain {
 
     const length = Math.round(1 + Math.random() * 9)
     if (Math.random() < 0.6) {
+      console.log('Generating full response, length ' + length)
       return this.#brain.speakResponse(text, length)
     } else {
+      console.log('Generating random response, length ' + length)
       return this.#brain.speakRand(length)
     }
   }
@@ -63,8 +65,10 @@ class ComboBrain {
 
     const length = Math.round(10 + Math.random() * 80)
     if (Math.random() < 0.6) {
+      console.log('Generating full response, length ' + length)
       return this.#brain.speakResponse(text, length)
     } else {
+      console.log('Generating random response, length ' + length)
       return this.#brain.speakRand(length)
     }
   }
@@ -73,6 +77,8 @@ class ComboBrain {
     if (this.#counter % maxGenerations !== 0) {
       return
     }
+
+    console.log('Reseeding...')
 
     this.#brain = new Markov(2)
 
@@ -84,6 +90,8 @@ class ComboBrain {
 
     await this.#brain.feedArray(comments)
     await this.#brain.feedArray(titles)
+
+    console.log('Done reseeding!')
   }
 }
 

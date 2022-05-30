@@ -110,6 +110,8 @@ class Markov {
     const addI = text.split(' ')
     wordList.push(...addI)
 
+    console.log('Got the list of words...')
+
     for (let parent of this.data) {
       for (let word of wordList) {
         if (parent.id.toLowerCase().indexOf(word.toLowerCase()) !== -1) {
@@ -120,13 +122,18 @@ class Markov {
       }
     }
 
+    console.log('Found our selections!')
+
     if (rndlist.length === 0) {
+      console.log('No good selections, random time')
       return this.speakRand(length)
     }
 
+    console.log('Finding our starting word')
     const starter = Markov.#weightRandom(rndlist)
     let out = ''
 
+    console.log('Putting everything together...')
     if (Math.random() > 0.5) {
       length = Math.floor(length / 2)
       const retrats = starter.split('').reverse().join('')
