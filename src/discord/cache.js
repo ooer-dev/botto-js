@@ -60,8 +60,9 @@ class DiscordCache {
 
   #load () {
     const rawFile = fs.readFileSync(cacheFilePath)
-    const messages = JSON.parse(rawFile).messages
-    const channels = JSON.parse(rawFile).caches
+    const json = JSON.parse(rawFile);
+    const messages = json.messages
+    const channels = json.channels
 
     if (messages.length) {
       this.#messages = messages
@@ -73,7 +74,7 @@ class DiscordCache {
   }
 
   #save () {
-    fs.writeFileSync(cacheFilePath, JSON.stringify({ messages: this.#messages, caches: this.#channels }))
+    fs.writeFileSync(cacheFilePath, JSON.stringify({ messages: this.#messages, channels: this.#channels }))
   }
 }
 
