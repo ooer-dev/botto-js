@@ -12,6 +12,7 @@ class ComboBrain {
 
   constructor () {
     this.#brain = new Markov(2)
+    this.thinking = false
   }
 
   reset () {
@@ -19,11 +20,15 @@ class ComboBrain {
   }
 
   learn (msg) {
+    this.thinking = true
     this.#brain.feed(msg)
+    this.thinking = false
     dcache.addMessage(msg)
   }
 
   async replyShort (msg) {
+    this.thinking = true
+
     await this.#reseed()
 
     let text = this.#generateShort(msg)
@@ -32,10 +37,14 @@ class ComboBrain {
       text = text.substring(0, 700)
     }
 
+    this.thinking = false
+
     return text
   }
 
   async replyLong (msg) {
+    this.thinking = true
+
     await this.#reseed()
 
     let text = this.#generateLong(msg)
@@ -43,6 +52,8 @@ class ComboBrain {
     if (text.length > 10000) {
       text = text.substring(0, 10000)
     }
+
+    this.thinking = false
 
     return text
   }

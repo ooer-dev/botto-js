@@ -10,7 +10,6 @@ const text = require('./util/text')
 const final = require('./brains/final')
 const keys = require('../config/keys.json')
 
-let markovInProgress = false
 let chatProbability = 0.02
 
 const sendMessage = async function (opts) {
@@ -255,44 +254,53 @@ bot.on('messageCreate', async function (msginst) {
   }
 
   ///////////////////////////////////////////////////////////////////////////////////////////////////////
-  if (markovInProgress || userID === bot.user.id) {
+  if (userID === bot.user.id) {
     return
   }
 
-  if (channels.isLearnChannel(channelID)) {
+  if (!combo.thinking && channels.isLearnChannel(channelID)) {
     combo.learn(message)
   }
 
   const reply = dcache.getMessageFromChannel(channelID)
   if (channels.isChatChannel(channelID) || Math.random() < chatProbability || checks.hasMention(message)) {
-    markovInProgress = true
-
     await new Promise(r => setTimeout(r, Math.round(Math.random() * 10000)))
-
-    if (Math.random() < 0.6) {
-      await sendMessage({
-        to: channelID,
-        message: final.generate(reply)
-      })
-    } else {
-      if (Math.random() > 0.5) {
-        const txt = await combo.replyLong(reply)
-        await sendMessage({
-          to: channelID,
-          message: txt
-        })
-      } else {
-        const txt = await combo.replyShort(reply)
-        await sendMessage({
-          to: channelID,
-          message: txt
-        })
-      }
-    }
-
-    markovInProgress = false
+    await sendMessage({
+      to: channelID,
+      message: await getMarkovResponse(reply)
+    })
   }
 })
+
+const getMarkovResponse = async reply => {
+  const brains = [
+    {
+      weight: 6,
+      predicate: () => true,
+      generate: async reply => final.generate(reply),
+    },
+    {
+      weight: 2,
+      predicate: () => !combo.thinking,
+      generate: async reply => await combo.replyLong(reply),
+    },
+    {
+      weight: 2,
+      predicate: () => !combo.thinking,
+      generate: async reply => await combo.replyShort(reply),
+    },
+  ].filter(b => b.predicate())
+
+  const rand = Math.random() * brains.reduce((a, b) => a + b.weight, 0)
+
+  let sum = 0
+  for (const brain of brains) {
+    sum += brain.weight
+    if (rand <= sum) {
+      return await brain.generate(reply)
+    }
+  }
+}
 
 ///////////////////////////
 
