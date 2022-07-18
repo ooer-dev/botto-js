@@ -296,5 +296,5 @@ bot.on('messageCreate', async function (msginst) {
 
 ///////////////////////////
 
-bot.login(keys.discordToken)
+bot.login(keys.discord_token)
 reddit.login()

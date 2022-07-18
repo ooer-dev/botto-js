@@ -13,13 +13,13 @@ class RedditClient {
 
   login () {
     return new Promise((resolve, reject) => {
-      this.#reddit.setupOAuth2(keys.key1, keys.key2)
-      this.#reddit.auth({ username: keys.username, password: keys.password }, function (err, response) {
+      this.#reddit.setupOAuth2(keys.reddit_client_id, keys.reddit_client_secret)
+      this.#reddit.auth({ username: keys.reddit_username, password: keys.reddit_password }, function (err, response) {
         if (err) {
           console.log('Unable to authenticate user: ' + err)
           reject(err)
         } else {
-          console.log(keys.username + ' successfully authenticated!')
+          console.log(keys.reddit_username + ' successfully authenticated!')
           resolve()
         }
       })
@@ -50,7 +50,7 @@ class RedditClient {
           const things = res.children
 
           for (const thing of things) {
-            if (thing.data.author.toLowerCase() === keys.username.toLowerCase()) {
+            if (thing.data.author.toLowerCase() === keys.reddit_username.toLowerCase()) {
               continue
             }
 
@@ -91,7 +91,7 @@ class RedditClient {
           const things = res.data.children
 
           for (const thing of things) {
-            if (thing.data.author.toLowerCase() === keys.username.toLowerCase()) {
+            if (thing.data.author.toLowerCase() === keys.reddit_username.toLowerCase()) {
               continue
             }
 
