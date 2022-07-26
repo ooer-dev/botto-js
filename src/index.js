@@ -32,6 +32,7 @@ bot.on('messageCreate', async function (msginst) {
   let message = msginst.content
   const userID = msginst.author.id
   const channelID = msginst.channelId
+  const isMentioned = msginst.mentions.has(bot.user)
 
   if (checks.isDirty(message) && !checks.isAdmin(userID)) {
     return
@@ -263,7 +264,7 @@ bot.on('messageCreate', async function (msginst) {
   }
 
   const reply = dcache.getMessageFromChannel(channelID)
-  if (channels.isChatChannel(channelID) || Math.random() < chatProbability || checks.hasMention(message)) {
+  if (channels.isChatChannel(channelID) || Math.random() < chatProbability || isMentioned) {
     await new Promise(r => setTimeout(r, Math.round(Math.random() * 10000)))
     await sendMessage({
       to: channelID,

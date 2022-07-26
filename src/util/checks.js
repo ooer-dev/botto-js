@@ -43,7 +43,3 @@ exports.isDirty = function (str) {
 
   return false
 }
-
-exports.hasMention = function (txt) {
-  return txt.indexOf('<@!313929951114035200>') > -1
-}
