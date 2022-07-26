@@ -165,6 +165,7 @@ bot.on('messageCreate', async function (msginst) {
       }
       break
     case '?pay':
+    case '?give':
       if (args.length === 4 && !isNaN(1 * args[3])) {
         const recipient = text.stringToID(args[1])
         const coin = args[2]
