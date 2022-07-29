@@ -267,9 +267,18 @@ bot.on('messageCreate', async function (msginst) {
   const reply = dcache.getMessageFromChannel(channelID)
   if (channels.isChatChannel(channelID) || Math.random() < chatProbability || isMentioned) {
     await new Promise(r => setTimeout(r, Math.round(Math.random() * 10000)))
+
+    let response = await getMarkovResponse(reply)
+
+    const isAMAChannel = channelID === '692475506573967412'
+    const isQuestion = response.trimEnd().endsWith('?')
+    if (isAMAChannel && !isQuestion) {
+      response += '?'
+    }
+
     await sendMessage({
       to: channelID,
-      message: await getMarkovResponse(reply)
+      message: response
     })
   }
 })
