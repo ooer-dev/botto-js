@@ -18,7 +18,7 @@ const sendMessage = async function (opts) {
   const files = opts.files || []
   const filtered = opts.filter || true
 
-  if (filtered && checks.isDirty(content)) return
+  if (filtered && checks.isDirty(content) && !checks.isAdmin(userID)) return
 
   if (content === '') content = null
 
