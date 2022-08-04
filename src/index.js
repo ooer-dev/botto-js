@@ -16,7 +16,7 @@ const sendMessage = async function (opts) {
   const channel = bot.channels.cache.get(opts.to)
   let content = opts.message || ''
   const files = opts.files || []
-  const filtered = opts.filter || true
+  const filtered = opts.filter ?? true
 
   if (filtered && checks.isDirty(content)) return
 
