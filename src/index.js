@@ -143,6 +143,7 @@ bot.on('messageCreate', async function (msginst) {
       }
       break
     case '?balance':
+    case '?bal':
       if (args.length === 1 || args.length === 2) {
         const account = args.length === 2 ? text.stringToID(args[1]) : userID
         const coins = Coins.getAllCoins(account)
