@@ -271,6 +271,11 @@ bot.on('messageCreate', async function (msginst) {
 
     let response = await getMarkovResponse(reply)
 
+    if (!(response?.trim().length)) { // short circuit to undefined, or length == 0 is falsy
+      console.log("Tried to send an empty message")
+      return;
+    }
+
     const isAMAChannel = channelID === '692475506573967412'
     const isQuestion = response.trimEnd().endsWith('?')
     if (isAMAChannel && !isQuestion) {
