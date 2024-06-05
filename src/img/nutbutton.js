@@ -1,5 +1,5 @@
 const fs = require('fs').promises
-const { createCanvas, Image } = require('canvas')
+const { createCanvas, Image } = require('@napi-rs/canvas')
 const axios = require('axios')
 
 const bot = require('../bot')
@@ -29,7 +29,7 @@ exports.generate = async text => {
   ctx.fillText(text, 0, 0)
   ctx.restore()
 
-  return canvas.toBuffer()
+  return canvas.toBuffer("image/png")
 }
 
 exports.generateFace = async (text, userId) => {
@@ -53,5 +53,5 @@ exports.generateFace = async (text, userId) => {
   ctx.fillText(text, 0, 0)
   ctx.restore()
 
-  return canvas.toBuffer()
+  return canvas.toBuffer("image/png")
 }
