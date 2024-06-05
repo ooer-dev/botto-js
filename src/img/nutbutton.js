@@ -13,7 +13,6 @@ const getAvatarBuffer = async userId => {
 }
 
 exports.generate = async text => {
-  console.log("Generate text: " + text)
   let canvas = createCanvas(504, 375)
   let ctx = canvas.getContext('2d')
 
