@@ -270,6 +270,10 @@ bot.on('messageCreate', async function (msginst) {
     await new Promise(r => setTimeout(r, Math.round(Math.random() * 10000)))
 
     let response = await getMarkovResponse(reply)
+    if (response.trim() === '') {
+      if (!isMentioned) return
+      response = ':warning: no thoughts, head empty'
+    }
 
     const isAMAChannel = channelID === '692475506573967412'
     const isQuestion = response.trimEnd().endsWith('?')
