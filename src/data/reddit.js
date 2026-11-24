@@ -9,6 +9,16 @@ class RedditClient {
 
   constructor () {
     this.#reddit = new rawjs('OoerBot v2.0 by mc_labs15')
+
+    // raw.js authenticates against ssl.reddit.com, which redirects and drops the POST
+    const apiRequest = this.#reddit._apiRequest
+    this.#reddit._apiRequest = function (endpoint, options, callback) {
+      if (options.domain === 'https://ssl.reddit.com') {
+        options.domain = 'https://www.reddit.com'
+      }
+
+      apiRequest.call(this, endpoint, options, callback)
+    }
   }
 
   login () {
