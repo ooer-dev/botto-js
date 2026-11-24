@@ -320,5 +320,7 @@ const getMarkovResponse = async reply => {
 
 ///////////////////////////
 
+process.on('SIGTERM', () => process.exit(0))
+
 bot.login(keys.discord_token)
 reddit.login()
